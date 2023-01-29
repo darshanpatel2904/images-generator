@@ -22,19 +22,19 @@ export default function ImageGenerator() {
   };
   const postRequest = async (prompts, number, size) => {
     if(prompts.length>0){
-      // const res = await fetch("api/imageUrl", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     prompt: prompts,
-      //     n: number,
-      //     size: size,
-      //   }),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
-      // const data = await res.json();
-      // setImages(data.data);
+      const res = await fetch("api/imageUrl", {
+        method: "POST",
+        body: JSON.stringify({
+          prompt: prompts,
+          n: number,
+          size: size,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setImages(data.data);
       onOpenModal();
     }
   };
