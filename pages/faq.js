@@ -1,71 +1,54 @@
 import React from 'react'
+import Faq from "react-faq-component";
 
 export default function faq() {
-   
+  const data = {
+    // title: "FAQ (How it works)",
+    rows: [
+      {
+        title: "How Long Does it takes to Generate pictures ?",
+        content: `Our image genrator has been trained for a long time. Powered by AI alforithms and trained many times for super realistic images . it can give you an amazing image within 30 seconds.`,
+      },
+      {
+        title: "Any tips to Create Better Images for Text prompts  ",
+        content: `1. The more image description you input, The amazing picture you get                                                     2. Input more detail descriptions in vocabulary,Phrases, Short Sentences, and separate them with commas. Donot use long sentences  `,
+      },
+      {
+        title: "What's the Standard Image Size Support ?",
+        content: `Our AI image generator from text support 256-1024 width & length in this version`,
+      },
+      {
+        title: "Can i create Multiple Images at Once ?",
+        content: `The answer is yes. Our Ai image generator supports Multiple images created at once. You can choose the the best one from them to use. `,
+      },
+      {
+        title: "Can You Guarantee Unique Creations? ",
+        content: `The answer is yes. Our Ai image generator creates the sa,e image from the same description. Ai image creator user the algorithm to create a new image based on your description every time. And you can create unlimited images `,
+      },
+    ],
+  };
   return (
-    <>
-      <button
-        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
-        Open regular modal
-      </button>
-      {showModal ? (
-        <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Modal Title
-                  </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                    I always felt like I could do anything. That’s the main
-                    thing people are controlled by! Thoughts- their perception
-                    of themselves! They're slowed down by their perception of
-                    themselves. If you're taught you can’t do anything, you
-                    won’t do anything. I was taught I could do everything.
-                  </p>
-                </div>
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
-    </>
+    <div className='h-screen m-10 mt-20'>
+      <Faq
+          data={data}
+          styles={{
+            bgColor: "#ffffff",
+            titleTextColor: "#000000",
+            rowTitleColor: "#000000",
+            rowContentColor: "#000000",
+            arrowColor: "#000000",
+            titleTextSize: "48px",
+            rowTitleTextSize: "1.5rem",
+            rowContentTextSize: "1.3rem",
+            rowContentPaddingTop: "10px",
+            rowContentPaddingBottom: "10px",
+            rowContentPaddingLeft: "50px",
+            rowContentPaddingRight: "150px",
+            transitionDuration: "0.4s",
+            timingFunc: "ease",
+            fontstyle: "Open Sans",
+          }}
+        />
+    </div>
   )
 }

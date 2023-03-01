@@ -23,7 +23,7 @@ export default function NavBar() {
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
             <a href="javascript:void(0)">
-              <h2 className="text-4xl font-semibold text-violet-400">Darshan</h2>
+              <h2 className="text-4xl font-semibold text-violet-400">Artify</h2>
             </a>
             <div className="md:hidden">
               <button
