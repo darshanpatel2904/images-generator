@@ -3,6 +3,8 @@ import { useState } from "react";
 import SimpleImageSlider from "react-simple-image-slider";
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import { account } from "./config";
+import { useRouter } from "next/router";
 
 export default function ImageGenerator() {
   const sizes = ["1024x1024", "512x512", "256x256"];
@@ -20,8 +22,21 @@ export default function ImageGenerator() {
   const handleClickSize = (key) => {
     setSize(key);
   };
+  const router = useRouter();
+  const [login, setLogin] = useState(false);
   const postRequest = async (prompts, number, size) => {
-    if(prompts.length>0){
+    const getData = account.get()
+    getData.then(
+      function(response){
+           setUserDetails(response)
+           setLogin(!login)
+          console.log(response);
+      },
+      function(error){
+          console.log(error);
+      }
+    )
+    if(prompts.length>0 && login){
       const res = await fetch("api/imageUrl", {
         method: "POST",
         body: JSON.stringify({
@@ -37,9 +52,18 @@ export default function ImageGenerator() {
       setImages(data.data);
       onOpenModal();
     }
+    else{
+      router.push("/login")
+    }
   };
   return (
-    <section className="container flex flex-col justify-between items-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:px-6 xl:px-28">
+    <section id="generate" className="container flex flex-col justify-between items-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:px-6 xl:px-28">
+         <div className="container flex items-center justify-center max-w-xl">
+        <Image
+          src={require("/public/img-DCOx34g2npi0VFuIS4kh4G9k.png")}
+          alt="image"
+        />
+      </div>
       <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-xl space-y-2">
           <div>
@@ -121,13 +145,6 @@ export default function ImageGenerator() {
             </div>
           </form>
         </div>
-      </div>
-
-      <div className="container flex items-center justify-center max-w-md">
-        <Image
-          src={require("/public/img-DCOx34g2npi0VFuIS4kh4G9k.png")}
-          alt="image"
-        />
       </div>
 
 

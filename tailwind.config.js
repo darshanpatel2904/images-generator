@@ -13,6 +13,9 @@ module.exports = {
         'lg': '1024px',
         'xl': '1440px',
       },
+      colors:{
+        primary:'#a78bfa'
+      }
     },
   },
   plugins: [ require('@tailwindcss/forms'),],

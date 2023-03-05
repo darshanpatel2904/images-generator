@@ -1,5 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { account } from "./config";
 
 export default function NavBar() {
   const [navbar, setNavbar] = useState(false);
@@ -15,14 +18,42 @@ export default function NavBar() {
     {
       name: "Contact",
       href: "/contact",
-    }
+    },
   ];
+  const [userDetails, setUserDetails] = useState();
+  const [login, setLogin] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+    const getData = account.get()
+    getData.then(
+      function(response){
+           setUserDetails(response)
+           setLogin(!login)
+          console.log(response);
+      },
+      function(error){
+          console.log(error);
+      }
+    )
+  },[router])
+
+  const handleLogout = async () => {
+    const promise = account.deleteSession('current');
+
+    promise.then(function (response) {
+      router.push('/login')
+      setLogin(!login)
+        console.log(response); // Success
+    }, function (error) {
+        console.log(error); // Failure
+    });
+  }
   return (
     <nav className="w-full bg-white shadow">
       <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-16">
         <div>
           <div className="flex items-center justify-between py-3 md:py-5 md:block">
-            <a href="javascript:void(0)">
+            <a href="">
               <h2 className="text-4xl font-semibold text-violet-400">Artify</h2>
             </a>
             <div className="md:hidden">
@@ -70,13 +101,27 @@ export default function NavBar() {
             }`}
           >
             <ul className="items-center justify-center space-y-8 md:flex md:space-x-16 md:space-y-0">
-            {pages.map((page, key) => {
-              return (
-                <li className="font-normal text-lg" key={key}>
-                  <Link href={page.href}>{page.name}</Link>
-                </li>
-              );
-            })}
+              {pages.map((page, key) => {
+                return (
+                  <li className="font-normal text-lg" key={key}>
+                    <Link href={page.href}>{page.name}</Link>
+                  </li>
+                );
+              })}
+              <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
+                {login ? (
+                  <div onClick={handleLogout}>
+                   <Image class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={require('../public/images.jpeg')} alt=""/>
+                   </div>
+                ) : (
+                  <button
+                    className="px-5 py-3 text-lg font-semibold rounded bg-violet-400 text-white"
+                    onClick={() => router.push("/login")}
+                  >
+                    login
+                  </button>
+                )}
+              </div>
             </ul>
           </div>
         </div>
