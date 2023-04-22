@@ -1,12 +1,20 @@
 import Image from "next/image";
 import { useState } from "react";
 import SimpleImageSlider from "react-simple-image-slider";
-import 'react-responsive-modal/styles.css';
-import { Modal } from 'react-responsive-modal';
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
 import { account } from "./config";
 import { useRouter } from "next/router";
+import { Configuration, OpenAIApi } from "openai";
+import { saveAs } from 'file-saver'
 
 export default function ImageGenerator() {
+  const configuration = new Configuration({
+    apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  });
+
+  const openai = new OpenAIApi(configuration);
+
   const sizes = ["1024x1024", "512x512", "256x256"];
   const [prompts, setPrompt] = useState("");
   const [number, setNumber] = useState(1);
@@ -23,42 +31,54 @@ export default function ImageGenerator() {
     setSize(key);
   };
   const router = useRouter();
-  const [login, setLogin] = useState(false);
-  const postRequest = async (prompts, number, size) => {
-    const getData = account.get()
-    getData.then(
-      function(response){
-           setUserDetails(response)
-           setLogin(!login)
-          console.log(response);
-      },
-      function(error){
-          console.log(error);
-      }
-    )
-    if(prompts.length>0 && login){
-      const res = await fetch("api/imageUrl", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: prompts,
-          n: number,
-          size: size,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await res.json();
-      setImages(data.data);
-      onOpenModal();
-    }
-    else{
-      router.push("/login")
-    }
+
+  const apiCall = async () => {
+    const response = await openai.createImage({
+      prompt: prompts,
+      n: parseInt(number),
+      size: size,
+    });
+    console.log(response.data.data)
+    setImages(response.data.data);
+    onOpenModal();
   };
+  const postRequest = async (prompts, number, size) => {
+    const getData = account.get();
+    getData.then(
+      function (response) {
+        console.log(response);
+        apiCall();
+      },
+      function (error) {
+        console.log(error);
+        router.push("/login");
+      }
+    );
+  };
+
+  const handleDownload = () =>{
+
+   console.log(images)
+
+    Promise.all(
+      images.map((obj, index) =>
+        fetch(obj)
+          .then(response => {
+          
+  
+            return response.blob()
+              .then(blob => saveAs(blob,  `image_${index}_${Date.now()}.png`));
+          }
+          )
+      )
+    );
+  }
   return (
-    <section id="generate" className="container flex flex-col justify-between items-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:px-6 xl:px-28">
-         <div className="container flex items-center justify-center max-w-xl">
+    <section
+      id="generate"
+      className="container flex flex-col justify-between items-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:px-6 xl:px-28"
+    >
+      <div className="container flex items-center justify-center max-w-xl">
         <Image
           src={require("/public/img-DCOx34g2npi0VFuIS4kh4G9k.png")}
           alt="image"
@@ -147,35 +167,32 @@ export default function ImageGenerator() {
         </div>
       </div>
 
-
       <div>
-      <Modal open={open} onClose={onCloseModal} center>
-        <div className="flex justify-center items-center m-10">
-       <div className="flex justify-center items-center h-auto w-auto">
-        <SimpleImageSlider
-        width={'40em'}
-        height={'40em'}
-        images={images}
-        showBullets={true}
-        showNavs={true}
-      />
+        <Modal open={open} onClose={onCloseModal} center>
+          <div className="flex justify-center items-center m-10">
+            <div className="flex justify-center items-center h-auto w-auto">
+              <SimpleImageSlider
+                width={"40em"}
+                height={"40em"}
+                images={images}
+                showBullets={true}
+                showNavs={true}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-10">
+            <button
+              className="px-8 py-3 text-lg font-semibold rounded text-violet-400 border-violet-400 border-2"
+              onClick={onCloseModal}
+            >
+              Close
+            </button>
+            <button className="px-8 py-3 text-lg font-semibold rounded bg-violet-400 text-white" onClick={()=>handleDownload()}>
+              Download
+            </button>
+          </div>
+        </Modal>
       </div>
-        </div>
-        <div className="flex justify-end gap-10">
-        <button
-                className="px-8 py-3 text-lg font-semibold rounded text-violet-400 border-violet-400 border-2"
-                onClick={onCloseModal}
-              >
-                Close
-              </button><button
-                className="px-8 py-3 text-lg font-semibold rounded bg-violet-400 text-white"
-                
-              >
-                Download
-              </button>
-        </div>
-      </Modal>
-    </div>
     </section>
   );
 }

@@ -20,7 +20,7 @@ export default function NavBar() {
       href: "/contact",
     },
   ];
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState({});
   const [login, setLogin] = useState(false);
   const router = useRouter();
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function NavBar() {
               <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
                 {login ? (
                   <div onClick={handleLogout}>
-                   <Image class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={require('../public/images.jpeg')} alt=""/>
+                   <Image className="inline-block h-10 w-10 rounded-full ring-2 ring-white" src={require('../public/images.jpeg')} alt=""/>
                    </div>
                 ) : (
                   <button

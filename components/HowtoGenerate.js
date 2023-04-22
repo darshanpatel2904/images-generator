@@ -57,7 +57,7 @@ export default function HowtoGenerate() {
         <div className="flex justify-center items-center">
           {steps.map((obj, key) => {
             return (
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col justify-center items-center" key={key}>
                 <div
                   className={`justify-center items-center ${
                     key + 1 === number ? "flex" : "hidden"
